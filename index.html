@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TODO</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: #2a2a2a;
+            color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        h1 {
+            color: #f39c12;
+            margin-bottom: 1rem;
+        }
+        button {
+            color: #333;
+            background-color: #e0e0e0;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0.5rem;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        button:hover {
+            background-color: #d5d5d5;
+            transform: scale(1.05);
+        }
+        input[type="text"] {
+            padding: 0.5rem;
+            margin: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: calc(100% - 2rem);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        input[type="text"]:focus {
+            border-color: #f39c12;
+            box-shadow: 0 0 8px rgba(243, 156, 18, 0.4);
+            outline: none;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        li {
+            background-color: #333;
+            border-radius: 5px;
+            margin: 0.5rem 0;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        li:hover {
+            background-color: #444;
+            transform: translateY(-2px);
+        }
+        input[type="checkbox"] {
+            margin-right: 1rem;
+        }
+        span, input[type="text"] {
+            flex: 1;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 1rem;
+                margin: 1rem;
+            }
+            input[type="text"] {
+                width: calc(100% - 1rem);
+            }
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script>
+        var app = angular.module("myApp", []);
+        app.controller("myCntrl", function ($scope) {
+            $scope.tasks = [
+                { "TITLE": "Task-1", "COMPLETED": true, "EDITING": false },
+                { "TITLE": "Task-2", "COMPLETED": false, "EDITING": false },
+                { "TITLE": "Task-3", "COMPLETED": true, "EDITING": false }
+            ];
+
+            $scope.addtask = function () {
+                if ($scope.newtask) {
+                    var t = {
+                        'TITLE': $scope.newtask,
+                        'COMPLETED': false,
+                        'EDITING': false
+                    };
+                    $scope.tasks.push(t);
+                    $scope.newtask = '';
+                } else {
+                    alert("Please enter the task to add");
+                }
+            };
+
+            $scope.edittask = function (task) {
+                task.EDITING = true;
+            };
+
+            $scope.turnOffEditing = function (task) {
+                task.EDITING = false;
+            };
+
+            $scope.deletetask = function (task) {
+                var index = $scope.tasks.indexOf(task);
+                $scope.tasks.splice(index, 1);
+            };
+        });
+    </script>
+</head>
+<body ng-app="myApp">
+    <div class="container" ng-controller="myCntrl">
+        <h1>TO DO APPLICATION</h1>
+        <hr>
+        <div>
+            <input type="text" ng-model="newtask" placeholder="Enter the Name of the Task">
+            <button ng-click="addtask()">ADD TASK</button>
+            <ul>
+                <li ng-repeat="task in tasks">
+                    <input type="checkbox" ng-model="task.COMPLETED">
+                    <span ng-show="!task.EDITING">{{task.TITLE}}</span>
+                    <input type="text" ng-show="task.EDITING" ng-model="task.TITLE" ng-blur="turnOffEditing(task)">
+                    <button ng-click="edittask(task)">EDIT</button>
+                    <button ng-click="deletetask(task)">DELETE</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
